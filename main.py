@@ -30,9 +30,44 @@ def listOfPlayers(id):
     response = requests.get(url, headers=headers)
 
     data = response.json()
+
+    squad = data["squad"]
+
     print(f"==================================== List of Players ====================================\n")
-    for person in data["squad"]:
-        print(f"Player: {person['name']:<25} | Position: {person['position']:<15} | Nationality: {person['nationality']}")
+    for i, person in enumerate(squad, start = 1):
+        print(f"{i}. Player: {person['name']:<25} | Position: {person['position']:<15} | Nationality: {person['nationality']}")
+
+    return squad
+
+    
+
+def liveSchedule():
+    url = "https://api.football-data.org/v4/matches"
+
+    headers = {
+        "X-Auth-Token": my_api_key
+    }
+
+    response = requests.get(url, headers=headers)
+
+    data = response.json()
+
+    for match in data["matches"]:
+        home_team = match["homeTeam"]["name"]
+        away_team = match["awayTeam"]["name"]
+        match_date = match["utcDate"]
+        status = match["status"]
+        home_score = match["score"]["fullTime"]["home"]
+        away_score = match["score"]["fullTime"]["away"]
+
+        print(f"Date: {match_date}")
+        print(f"Match: {home_team} vs {away_team}")
+        print(f"Status: {status}")
+
+        print(f"Score: {home_team} {home_score} - {away_score} {away_team}")
+
+        print("-----------------------------------------------------------------------------------------")
+
 
 def selectTeamPage():
 
@@ -56,7 +91,7 @@ def designatedTeamMenu(teamID):
     while True:
         print("===================== TEAM MENU =====================")
         print("1. View Players")
-        print("2. View Team Schedule")
+        print("2. View live Schedule")
         print("3. View Betting Odds")
         print("Or enter 'q' to quit")
         # print(4. Ask about the game using genai api)?
@@ -64,10 +99,13 @@ def designatedTeamMenu(teamID):
         userNumberSelection = input("Select an option (1 - 3): ")
 
         if userNumberSelection == "1":
+            print("\n")
             listOfPlayers(teamID)
+        
         elif userNumberSelection == "2":
-             print("coming soon")
-            # add team schedule
+            print("\n")
+            liveSchedule()
+    
         elif userNumberSelection == "3":
             print("coming soon")
             # add betting odds
