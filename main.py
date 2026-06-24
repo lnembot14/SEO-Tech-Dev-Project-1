@@ -1,8 +1,15 @@
 # import requests for APIs
 import requests
+from google import genai
+
 
 response_2 = requests.get("https://api.the-odds-api.com/v4/sports/soccer_fifa_world_cup/odds?regions=eu&markets=h2h,spreads,totals&oddsFormat=decimal&apiKey=3527d7d205521b10d613ced02cdface2")
 betting_json = response_2.json()
+
+
+client = genai.Client(api_key="AQ.Ab8RN6JfMGi7j-Msvehr5lEmfNITmm8JMTu4mfiR4Gt-_qokww")
+
+
 
 world_cup_teams = [
     "Argentina",
@@ -59,21 +66,33 @@ user_team = str(input("Hello, please choose a team to begin: "))
 
 
 if user_team in world_cup_teams:
-    print("Great let's fetch this teams next opponent where you can check out the teams moneyline odds for the next game via Pinnacle")
-    for game in betting_json:
-        if user_team == game['home_team'] or user_team == game['away_team']:
-            for bet_platform in game['bookmakers']:
-                if bet_platform['title'] == 'Pinnacle':
-                    for outcome in bet_platform['markets']:
-                        if outcome['key'] == 'h2h':
-                            h2h_dict = {}
-                            for moneyline in outcome['outcomes']:
-                                h2h_dict[moneyline['name']] = moneyline['price']
-                            list_of_odds = []
-                            for key, value in h2h_dict.items():
-                                list_of_odds.append(f"{key} {value}")
-                            final_format = " | ".join(list_of_odds)
-                            print(f"Moneyline for next match: {final_format}")
+    user_choice = int(input("Please select an option\n1.Team's betting odds for next match\n2. Fun Fact "))
+    if user_choice == 1:
+        print("Generating your fun fact...")
+        gen_ai_response = client.models.generate_content(
+        model="gemini-3.1-flash-lite",
+        config={
+            "system_instruction": "Act as if you're an expert on all things World Cup, keep your answers nice and brief"
+        },
+        contents=f"Give me a fun fact about the following team {user_team}"
+        )
+        print(gen_ai_response.text)
+    elif user_choice == 2:
+        print("Great let's fetch this teams next opponent where you can check out the teams moneyline odds for the next game via Pinnacle")
+        for game in betting_json:
+            if user_team == game['home_team'] or user_team == game['away_team']:
+                for bet_platform in game['bookmakers']:
+                    if bet_platform['title'] == 'Pinnacle':
+                        for outcome in bet_platform['markets']:
+                            if outcome['key'] == 'h2h':
+                                h2h_dict = {}
+                                for moneyline in outcome['outcomes']:
+                                    h2h_dict[moneyline['name']] = moneyline['price']
+                                list_of_odds = []
+                                for key, value in h2h_dict.items():
+                                    list_of_odds.append(f"{key} {value}")
+                                final_format = " | ".join(list_of_odds)
+                                print(f"Moneyline for next match: {final_format}")
             
     
 
