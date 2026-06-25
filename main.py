@@ -32,7 +32,7 @@ def terminate_or_return(team_id, user_team):
 
 
 def selection_team():
-    user_team = str(input("Hello, please choose a team to begin: "))
+    user_team = str(input("\nHello, please choose a team to begin: "))
     WCTeams = wcFeaturesFunctions.worldCupTeams()
     teamID = wcFeaturesFunctions.findTeamId(user_team, WCTeams)
     if teamID:
@@ -56,14 +56,14 @@ def get_schedule():
 
 
 def welcome_page():
-    print("Hello welcome to the FIFA World Cup App!")
-    first_choice = int(input("1. Select option one to view live FIFA World Cup Schedule\n2. Select option two to choose team\n"))
+    print("========================== Hello welcome to the FIFA World Cup App! ========================== ")
+    first_choice = int(input("1. Select option one to view live FIFA World Cup Schedule\n2. Select option two to choose team\n\n Please enter a option: "))
     return first_choice
 
 
 def menu_selection(id_team, user_team):
     while True:
-        print("Menu\n1. Players \n2. Overview\n3. Odds\n4. Fun Fact\n5. Exit Application \n")
+        print("\n========================== Menu ==========================\n1. Players \n2. Overview\n3. Odds\n4. Fun Fact\n5. Exit Application \n")
 
         user_choice = int(input("Enter Selection: "))
 
