@@ -18,7 +18,6 @@ def overview_response(team):
     print(f"================== {team.upper()} OVERVIEW =========================")
     print(overview)
     print("=====================================================================")
-    terminate_or_return()
 
 
 def fun_fact_team(teamName):
@@ -34,5 +33,5 @@ def fun_fact_team(teamName):
     print(f"================= {teamName.upper()} FUN FACT==========================")
     print(fun_fact)
     print("===================================================================")
-    terminate_or_return()
+
 

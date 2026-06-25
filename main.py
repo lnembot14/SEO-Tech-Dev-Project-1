@@ -1,52 +1,86 @@
 # import requests for APIs
 import gemini
 import betting
+import wcFeaturesFunctions
+import sys
 
 def end_app():
-    print("You have excited the program, goodbye!")
+    print("You have exited the program, goodbye!")
     sys.exit()
 
-def terminate_or_return():
-    print("Enter 1 to go back to main menu ")
+def terminate_or_return(team_id, user_team):
+    print("Enter 1 to go back to menu")
     print("Enter 2 to exit application")
-    print("Enter 3 to choose new Team")
+    print("Enter 3 to choose a team/select new team")
+    print("Enter 4 to keep exploring team")
     answer = int(input(""))
     if answer == 1:
-        pass
+        result = welcome_page()
+        if result == 1:
+            get_schedule()
+        elif result == 2:
+            val1, val2 = selection_team()
+            menu_selection(val1, val2)
     elif answer == 2:
         end_app()
     elif answer == 3:
-        new_team = select_team_page()
-        menu_selection(new_team)
+        t1, t2= selection_team()
+        menu_selection(t1, t2)
+    elif answer == 4:
+        menu_selection(team_id, user_team)
 
 
-def select_team_page():
-    print("Hello welcome to the FIFA World Cup App!")
+
+def selection_team():
     user_team = str(input("Hello, please choose a team to begin: "))
-    if user_team not in world_cup_teams:
-        print("Team is not in WC, try again!")
+    WCTeams = wcFeaturesFunctions.worldCupTeams()
+    teamID = wcFeaturesFunctions.findTeamId(user_team, WCTeams)
+    if teamID:
+        return teamID
     else:
-        return user_team
+        print("Team not in world cup")
+
+def get_schedule():
+    wcFeaturesFunctions.liveSchedule()
+    next_step = int(input("1. Back to Menu\n2. Exit Progran\n"))
+    if next_step == 1:
+        next_action = welcome_page()
+        if next_action == 1:
+            wcFeaturesFunctions.liveSchedule()
+        elif next_action == 2:
+            t_id, t_name = selection_team()
+            menu_selection(t_id, t_name)
+    elif next_step == 2:
+        sys.exit()
 
 
-def menu_selection(user_team):
+
+def welcome_page():
+    print("Hello welcome to the FIFA World Cup App!")
+    first_choice = int(input("1. Select option one to view live FIFA World Cup Schedule\n2. Select option two to choose team\n"))
+    return first_choice
+
+
+def menu_selection(id_team, user_team):
     while True:
-        print("Menu\n1. Players \n2. Overview\n3. Odds\n4. Schedule\n5. Fun Fact\n6. Exit Application\n")
+        print("Menu\n1. Players \n2. Overview\n3. Odds\n4. Fun Fact\n5. Exit Application \n")
 
         user_choice = int(input("Enter Selection: "))
 
         if user_choice == 1 :
-            print("Coming soon")
+            wcFeaturesFunctions.listOfPlayers(id_team)
+            terminate_or_return(id_team, user_team)
         elif user_choice == 2:
-            overview_response(user_team)
+            gemini.overview_response(user_team)
+            terminate_or_return(id_team, user_team)
         elif user_choice == 3 :
-            betting_odds(user_team)
+            betting.betting_odds(user_team)
+            terminate_or_return(id_team, user_team)
         elif user_choice == 4:
-            print("Coming soon")
+            gemini.fun_fact_team(user_team)
+            terminate_or_return(id_team, user_team)
         elif user_choice == 5:
-            fun_fact_team(user_team)
-        elif user_choice == 6:
-            print("You have excited the program, goodbye!")
+            print("You have exited the program, goodbye!")
             break
         else:
             print("You have entered invalid choice")
@@ -54,8 +88,12 @@ def menu_selection(user_team):
 
 
 def main():
-    team = select_team_page()
-    menu_selection(team)
+    start_val = welcome_page()
+    if start_val == 1:
+        get_schedule()
+    elif start_val == 2:
+        team_id, team_name = selection_team()
+        menu_selection(team_id, team_name)
 
 main()
     

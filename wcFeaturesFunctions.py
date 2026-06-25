@@ -2,12 +2,9 @@ import os
 import requests
 import json
 
-import os
-import requests
-import json
-
 # Global Variable
 my_api_key = os.getenv('SOCCER_APIKEY')
+
 
 def worldCupTeams():
     url = "http://api.football-data.org/v4/competitions/WC/teams"
@@ -22,8 +19,9 @@ def worldCupTeams():
 def findTeamId(teamName, teams):
     for team in teams:
         if teamName.lower() == team["name"].lower():
-            return team["id"]
+            return team["id"], team["name"]
     return None
+
 
 def listOfPlayers(id):
     url =  f"http://api.football-data.org/v4/teams/{id}"

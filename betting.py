@@ -5,8 +5,10 @@ betting_json = response_2.json()
 
 def betting_odds(team):
     print("Great let's fetch this teams next opponent where you can check out the teams moneyline odds for the next game via Pinnacle")
+    found = False
     for game in betting_json:
             if team == game['home_team'] or team == game['away_team']:
+                found = True
                 for bet_platform in game['bookmakers']:
                     if bet_platform['title'] == 'Pinnacle':
                         for outcome in bet_platform['markets']:
@@ -21,4 +23,6 @@ def betting_odds(team):
                                 print(f"================{team.upper()} ODDS===========================")
                                 print(f"Moneyline for next match: {final_format}")
                                 print("===============================================================")
-    terminate_or_return()
+    if not found:
+        print("Team has played their final group stage match, no odds available")
+    
