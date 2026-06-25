@@ -85,8 +85,6 @@ def menu_selection(id_team, user_team):
         else:
             print("You have entered invalid choice")
 
-fa
-
 def main():
     start_val = welcome_page()
     if start_val == 1:
