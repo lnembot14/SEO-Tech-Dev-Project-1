@@ -4,9 +4,9 @@ import betting
 import wcFeaturesFunctions
 import sys
 
+
 def end_app():
-    print("You have exited the program, goodbye!")
-    sys.exit()
+    return sys.exit()
 
 def terminate_or_return(team_id, user_team):
     print("Enter 1 to go back to menu")
@@ -80,8 +80,7 @@ def menu_selection(id_team, user_team):
             gemini.fun_fact_team(user_team)
             terminate_or_return(id_team, user_team)
         elif user_choice == 5:
-            print("You have exited the program, goodbye!")
-            break
+            end_app()
         else:
             print("You have entered invalid choice")
 
