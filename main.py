@@ -4,7 +4,14 @@ import betting
 import wcFeaturesFunctions
 import sys
 
+# import for databases
+import worldcup_database as db
+from sqlalchemy import text
+db.init_db()
+db.buildTeamTable
+
 def end_app():
+    db.clearFav()
     print("You have exited the program, goodbye!")
     sys.exit()
 
@@ -29,8 +36,6 @@ def terminate_or_return(team_id, user_team):
     elif answer == 4:
         menu_selection(team_id, user_team)
 
-
-
 def selection_team():
     user_team = str(input("\nHello, please choose a team to begin: "))
     WCTeams = wcFeaturesFunctions.worldCupTeams()
@@ -42,7 +47,7 @@ def selection_team():
 
 def get_schedule():
     wcFeaturesFunctions.liveSchedule()
-    next_step = int(input("1. Back to Menu\n2. Exit Progran\n"))
+    next_step = int(input("1. Back to Menu\n2. Exit Program\n"))
     if next_step == 1:
         next_action = welcome_page()
         if next_action == 1:
@@ -57,13 +62,13 @@ def get_schedule():
 
 def welcome_page():
     print("========================== Hello welcome to the FIFA World Cup App! ========================== ")
-    first_choice = int(input("1. Select option one to view live FIFA World Cup Schedule\n2. Select option two to choose team\n\n Please enter a option: "))
+    first_choice = int(input("1. Select option one to view live FIFA World Cup Schedule\n2. Select option two to choose team\n3. Select option three to view favorite team\n\n Please enter a option: "))
     return first_choice
 
 
 def menu_selection(id_team, user_team):
     while True:
-        print("\n========================== Menu ==========================\n1. Players \n2. Overview\n3. Odds\n4. Fun Fact\n5. Exit Application \n")
+        print("\n========================== Menu ==========================\n1. Players \n2. Overview\n3. Odds\n4. Fun Fact\n5. Claim Your Favorite Team\n6. Exit Application \n")
 
         user_choice = int(input("Enter Selection: "))
 
@@ -80,6 +85,10 @@ def menu_selection(id_team, user_team):
             gemini.fun_fact_team(user_team)
             terminate_or_return(id_team, user_team)
         elif user_choice == 5:
+            favTeamId = id_team
+            db.saveFav(favTeamId)
+            print(f"{user_team} saved as your favorite team")
+        elif user_choice == 6:
             print("You have exited the program, goodbye!")
             break
         else:
@@ -92,6 +101,18 @@ def main():
     elif start_val == 2:
         team_id, team_name = selection_team()
         menu_selection(team_id, team_name)
+    elif start_val == 3:
+
+            result = db.getFav()
+
+            if result:
+                print("===================== FAVORITE TEAM =====================")
+                print(f"Team: {result[0]}")
+                print(f"Coach: {result[1]}")
+                print(f"Colors: {result[2]}")
+                print(f"Founded: {result[3]}")
+            else:
+                print("No favorite team yet selected")
 
 main()
     
