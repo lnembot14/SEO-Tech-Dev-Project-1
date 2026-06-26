@@ -8,9 +8,9 @@ engine = sa.create_engine("sqlite:///worldcup_2.db")
 
 
 def init_db():
-    with engine.connect() as connection:
+    with engine.begin() as connection:
         connection.execute(text("CREATE TABLE IF NOT EXISTS favorites (id INTEGER PRIMARY KEY AUTOINCREMENT, team_id INTEGER)"))
-        connection.commit()
+        
 
 def buildTeamTable():
 
@@ -50,7 +50,7 @@ def saveFav(team_id):
            
 
 def getFav():
-        with engine.connect() as connection:
+        with engine.begin() as connection:
             result = connection.execute(text("SELECT t.team_name, t.coach, t.club_colors, t.founded FROM teamInfo t JOIN favorites f ON t.team_id = f.team_id")).fetchone()
 
             return result

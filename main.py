@@ -8,7 +8,7 @@ import sys
 import worldcup_database as db
 from sqlalchemy import text
 db.init_db()
-db.buildTeamTable
+db.buildTeamTable()
 
 def end_app():
     db.clearFav()
@@ -88,6 +88,15 @@ def menu_selection(id_team, user_team):
             favTeamId = id_team
             db.saveFav(favTeamId)
             print(f"{user_team} saved as your favorite team")
+            result = db.getFav()
+            if result:
+                print("===================== FAVORITE TEAM =====================")
+                print(f"Team: {result[0]}")
+                print(f"Coach: {result[1]}")
+                print(f"Colors: {result[2]}")
+                print(f"Founded: {result[3]}")
+            else:
+                print("did not save properly")
         elif user_choice == 6:
             print("You have exited the program, goodbye!")
             break
