@@ -30,8 +30,7 @@ def fun_fact_team(teamName):
     contents=f"Give me a fun fact about the following team {teamName}"
     )
     fun_fact = gen_ai_response.text
-    print(f"================= {teamName.upper()} FUN FACT==========================")
+    print(f"================================{teamName.upper()} FUN FACT=====================================")
     print(fun_fact)
-    print("===================================================================")
-
+    print("=================================================================================================")
 

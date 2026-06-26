@@ -1,16 +1,19 @@
 import requests
 
-response_2 = requests.get("https://api.the-odds-api.com/v4/sports/soccer_fifa_world_cup/odds?regions=eu&markets=h2h,spreads,totals&oddsFormat=decimal&apiKey=8549f0c11606067fdb19f4c7134e43d8")
+response_2 = requests.get("https://api.the-odds-api.com/v4/sports/soccer_fifa_world_cup/odds?regions=eu&markets=h2h,spreads,totals&oddsFormat=decimal&apiKey=dc8a3b195dba38336c9c5b0f50cdad8e")
 betting_json = response_2.json()
 
+
+
 def betting_odds(team):
-    print("Great let's fetch this teams next opponent where you can check out the teams moneyline odds for the next game via Pinnacle")
-    found = False
+    team_in_json = False
+    coolbet_found = False
     for game in betting_json:
             if team == game['home_team'] or team == game['away_team']:
-                found = True
+                team_in_json = True
                 for bet_platform in game['bookmakers']:
-                    if bet_platform['title'] == 'Pinnacle':
+                    if bet_platform['title'] == 'Coolbet':
+                        coolbet_found = True
                         for outcome in bet_platform['markets']:
                             if outcome['key'] == 'h2h':
                                 h2h_dict = {}
@@ -20,9 +23,10 @@ def betting_odds(team):
                                 for key, value in h2h_dict.items():
                                     list_of_odds.append(f"{key} {value}")
                                 final_format = " | ".join(list_of_odds)
-                                print(f"================{team.upper()} ODDS===========================")
-                                print(f"Moneyline for next match: {final_format}")
-                                print("===============================================================")
-    if not found:
-        print("Team has played their final group stage match, no odds available")
-    
+                                return final_format
+    if not team_in_json:
+        return "Team has no upcoming matches with data"
+    elif not coolbet_found:
+        return "Teams match not found"
+    else:
+        return "Teams head to head not found, but on coolbet"

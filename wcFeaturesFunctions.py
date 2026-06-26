@@ -54,7 +54,7 @@ def liveSchedule():
     response = requests.get(url, headers=headers)
 
     data = response.json()
-
+    print("============================================================================================")
     for match in data["matches"]:
         home_team = match["homeTeam"]["name"]
         away_team = match["awayTeam"]["name"]
@@ -70,3 +70,4 @@ def liveSchedule():
         print(f"Score: {home_team} {home_score} - {away_score} {away_team}")
 
         print("-----------------------------------------------------------------------------------------")
+    print("============================================================================================")
